@@ -1,0 +1,11 @@
+sentence-transformers==2.4.0
+chromadb==0.4.0
+llama-index==0.10.0
+fastapi==0.99.0
+PyGithub==2.1.1
+python-dotenv==1.0.0
+pydantic==1.10.1
+uvicorn[standard]==0.24.0
+beautifulsoup4==4.12.3
+markdown==3.5.1
+requests==2.31.5

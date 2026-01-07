@@ -600,24 +600,29 @@ class GitHubCrawler:
                                 issue_limit: int = 10,
                                 comment_limit: int = 10) -> List[Dict[str, Any]]:
         """
-        获取Issue及其评论（优化版本，限制数量）
+        获取Issue及其评论（修复版本）
         """
         print(f"📥 开始获取仓库 {repo_name} 的Issue和评论...")
         
-        # 获取Issue（限制数量）
-        issues = self.get_issues(repo_name, state="all", limit=issue_limit, use_cache=False)
+        # 重要：先获取Issue列表，限制数量
+        issues = self.get_issues(repo_name, state="all", limit=issue_limit)
         
         if not issues:
             print("❌ 没有获取到Issue数据")
             return []
         
-        results = []
-        total_issues = len(issues)
+        print(f"✅ 获取到 {len(issues)} 个Issue")
         
         # 只处理有评论的Issue（最多5个）
         issues_with_comments = [i for i in issues if i.comments > 0][:5]
         
+        if not issues_with_comments:
+            print("⚠ 没有找到有评论的Issue")
+            return []
+        
         print(f"🔍 将处理 {len(issues_with_comments)} 个有评论的Issue...")
+        
+        results = []
         
         for i, issue in enumerate(issues_with_comments):
             print(f"\n[{i+1}/{len(issues_with_comments)}] 处理Issue #{issue.number}...")
@@ -630,8 +635,7 @@ class GitHubCrawler:
                 comments = self.get_issue_comments(
                     repo_name, 
                     issue.number, 
-                    max_comments=comment_limit,
-                    use_cache=False
+                    max_comments=comment_limit
                 )
                 
                 if comments:
@@ -648,7 +652,7 @@ class GitHubCrawler:
                     ]
                     results.append(issue_dict)
                 else:
-                    print("   ⚠ 获取评论失败")
+                    print("   ⚠ 获取评论失败，可能没有评论或API限制")
             else:
                 print("   ⚠ 无评论，跳过")
         

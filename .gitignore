@@ -39,6 +39,7 @@ Thumbs.db
 
 # 模型缓存
 model_cache/
+models/
 *.bin
 *.pth
 *.h5

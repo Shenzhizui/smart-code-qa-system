@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Day 4 测试：数据向量化与存储功能 - 修复版
+demo4 测试：数据向量化与存储功能
 """
 
 import sys
@@ -432,11 +432,11 @@ def main():
     print(f"\n通过: {passed}/{total}")
     
     if passed == total:
-        print("\n🎉 所有测试通过！")
-        print("\n运行演示: python scripts/day4_demo.py")
+        print("\所有测试通过！")
+        print("\n运行演示: python scripts/demo4.py")
     elif passed >= 4:
         print(f"\n  {total - passed} 个测试失败，但核心功能正常")
-        print("\n仍然可以运行演示: python scripts/day4_demo.py")
+        print("\n仍然可以运行演示: python scripts/demo4.py")
     else:
         print(f"\n  {total - passed} 个测试失败，需要修复")
     

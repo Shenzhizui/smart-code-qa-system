@@ -301,7 +301,7 @@ class GitHubCrawler:
             logger.info(f"  找到README文件")
             return content
         except:
-            logger.warning("⚠ 未找到README文件")
+            logger.warning("未找到README文件")
             return None
     
     def get_directory_contents(self, repo_name: str, path: str = "") -> List[GitHubFile]:
@@ -602,7 +602,7 @@ class GitHubCrawler:
         """
         获取Issue及其评论（修复版本）
         """
-        print(f"📥 开始获取仓库 {repo_name} 的Issue和评论...")
+        print(f"开始获取仓库 {repo_name} 的Issue和评论...")
         
         # 重要：先获取Issue列表，限制数量
         issues = self.get_issues(repo_name, state="all", limit=issue_limit)
@@ -617,10 +617,10 @@ class GitHubCrawler:
         issues_with_comments = [i for i in issues if i.comments > 0][:5]
         
         if not issues_with_comments:
-            print("⚠ 没有找到有评论的Issue")
+            print("没有找到有评论的Issue")
             return []
         
-        print(f"🔍 将处理 {len(issues_with_comments)} 个有评论的Issue...")
+        print(f"将处理 {len(issues_with_comments)} 个有评论的Issue...")
         
         results = []
         
@@ -631,7 +631,7 @@ class GitHubCrawler:
             
             # 获取评论（限制数量）
             if issue.comments > 0:
-                print(f"   📝 获取评论中...")
+                print(f"获取评论中...")
                 comments = self.get_issue_comments(
                     repo_name, 
                     issue.number, 
@@ -652,9 +652,9 @@ class GitHubCrawler:
                     ]
                     results.append(issue_dict)
                 else:
-                    print("   ⚠ 获取评论失败，可能没有评论或API限制")
+                    print("获取评论失败，可能没有评论或API限制")
             else:
-                print("   ⚠ 无评论，跳过")
+                print("无评论，跳过")
         
         print(f"\n  完成! 共处理 {len(results)} 个Issue")
         return results
@@ -810,7 +810,3 @@ if __name__ == "__main__":
     print("3. 数量限制（避免过多数据）")
     print("4. 进度显示（更好的用户体验）")
     print("=" * 60)
-    print("\n请运行演示脚本:")
-    print("  python scripts/day1_demo.py   - Day 1演示")
-    print("  python scripts/day2_demo.py   - Day 2演示")
-    print("  python scripts/day3_demo.py   - Day 3演示")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Day 3 演示脚本 - 修复版本（避免无限循环）
+ demo3 演示脚本 - 修复版本（避免无限循环）
 """
 
 import sys
@@ -14,7 +14,7 @@ sys.path.insert(0, str(project_root))
 
 def main():
     print("=" * 70)
-    print("Day 3 演示：GitHub Issue与PR数据获取（修复版）")
+    print(" demo3 演示：GitHub Issue与PR数据获取（修复版）")
     print("=" * 70)
     
     # 1. 初始化组件
@@ -121,7 +121,7 @@ def main():
                 issue_dict = issue.to_dict()
                 issues_data.append(issue_dict)
             
-            output_file = "data/day3_demo_issues.json"
+            output_file = "data/demo3_issues.json"
             os.makedirs(os.path.dirname(output_file), exist_ok=True)
             
             with open(output_file, 'w', encoding='utf-8') as f:
@@ -135,7 +135,7 @@ def main():
             for pr in prs[:3]:  # 只保存前3个
                 prs_data.append(pr.to_dict())
             
-            output_file = "data/day3_demo_prs.json"
+            output_file = "data/demo3_prs.json"
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(prs_data, f, ensure_ascii=False, indent=2)
             
@@ -157,7 +157,7 @@ def main():
         print(f"   PR数量: {pr_count} ({pr_count/len(issues)*100:.1f}%)")
     
     print("\n" + "=" * 70)
-    print("  Day 3 演示完成！")
+    print("   demo3 演示完成！")
     print("=" * 70)
     
     print("\n安全完成的功能:")
@@ -171,8 +171,8 @@ def main():
 
     print("\n  下一步:")
     print("1. 运行测试: python tests/test_day2.py")
-    print("2. 提交代码: git add . && git commit -m 'Day 3完成'")
-    print("3. 准备Day 4: 数据向量化与向量数据库存储")
+    print("2. 提交代码: git add . && git commit -m ' demo3完成'")
+    print("3. 准备demo4: 数据向量化与向量数据库存储")
     
 if __name__ == "__main__":
     main()

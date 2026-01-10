@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Day 3 测试：Issue和PR功能
+demo3 测试：Issue和PR功能
 """
 
 import sys
@@ -106,7 +106,7 @@ def run_issue_processor_demo():
 def main():
     """主测试函数"""
     print("=" * 60)
-    print("Day 3 测试套件：Issue和PR功能")
+    print("demo3测试套件：Issue和PR功能")
     print("=" * 60)
     
     tests = [
@@ -141,11 +141,11 @@ def main():
     print(f"\n通过: {passed}/{total}")
     
     if passed == total:
-        print("\n🎉 所有测试通过！")
-        print("\n运行演示: python scripts/day3_demo.py")
+        print("\n所有测试通过！")
+        print("\n运行演示: python scripts/demo3.py")
     elif passed >= 3:
         print(f"\n  {total - passed} 个测试失败，但核心功能正常")
-        print("\n仍然可以运行演示: python scripts/day3_demo.py")
+        print("\n仍然可以运行演示: python scripts/demo3.py")
     else:
         print(f"\n  {total - passed} 个测试失败，需要修复")
     

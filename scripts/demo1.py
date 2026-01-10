@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Day 1 演示脚本：GitHub爬取模块演示
+demo1 演示脚本：GitHub爬取模块演示
 """
 
 import sys
@@ -12,10 +12,10 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root))
 
-def day1_demo():
-    """Day 1演示"""
+def demo1():
+    """demo1演示"""
     print("=" * 60)
-    print("Day 1: GitHub爬取模块演示")
+    print("demo1: GitHub爬取模块演示")
     print("=" * 60)
     
     try:
@@ -71,12 +71,12 @@ def day1_demo():
         print("未获取到目录内容")
     
     print("\n" + "=" * 60)
-    print(" Day 1演示完成")
+    print(" demo1演示完成")
     print("=" * 60)
 
 def main():
     """主函数"""
-    print("Day 1演示脚本 - GitHub爬取模块")
+    print("demo1演示脚本 - GitHub爬取模块")
     print("-" * 40)
     print("功能包括:")
     print("1. GitHub连接测试")
@@ -85,7 +85,7 @@ def main():
     print("4. 目录内容预览")
     print("-" * 40)
     
-    day1_demo()
+    demo1()
 
 if __name__ == "__main__":
     main()

@@ -279,7 +279,7 @@ def main():
             "test_queries": test_queries
         }
         
-        output_file = "data/day4_demo_results.json"
+        output_file = "data/demo4_results.json"
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         
         with open(output_file, 'w', encoding='utf-8') as f:
@@ -326,7 +326,7 @@ def main():
     print("\n  创建的目录和文件:")
     print(f"   • chroma_data/ - ChromaDB存储目录")
     print(f"   • models/ - 模型缓存目录")
-    print(f"   • data/day4_demo_results.json - 演示结果")
+    print(f"   • data/demo4_results.json - 演示结果")
 
 if __name__ == "__main__":
     main()

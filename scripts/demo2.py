@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Day 2 演示脚本
+ demo2 演示脚本
 """
 
 import sys
@@ -16,7 +16,7 @@ from src.crawler.data_processor import DataProcessor
 
 def main():
     print("=" * 70)
-    print("Day 2 演示：文件列表获取与代码下载")
+    print(" demo2 演示：文件列表获取与代码下载")
     print("=" * 70)
     
     # 1. 初始化爬取器和处理器
@@ -47,7 +47,7 @@ def main():
         # 显示前5个
         print("   前5个条目:")
         for i, item in enumerate(contents[:5]):
-            type_icon = "" if item.type == "dir" else "📄"
+            type_icon = "" if item.type == "dir" else ""
             print(f"   {type_icon} {item.name} ({item.type}, {item.size} bytes)")
     else:
         print("未获取到目录内容")
@@ -118,7 +118,7 @@ def main():
         print(f"元数据: {chunks[0].metadata.get('repository')}")
     
     print("\n" + "=" * 70)
-    print("Day 2 演示完成！")
+    print(" demo2 演示完成！")
     print("=" * 70)
     
     print("\n今日完成功能:")
@@ -131,8 +131,8 @@ def main():
     
     print("\n下一步:")
     print("1. 运行测试: python tests/test_day2.py")
-    print("2. 提交代码: git add . && git commit -m 'Day 2完成'")
-    print("3. 准备Day 3: Issue数据获取")
+    print("2. 提交代码: git add . && git commit -m ' demo2完成'")
+    print("3. 准备demo3: Issue数据获取")
 
 if __name__ == "__main__":
     main()

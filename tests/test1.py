@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Day 1测试 - 修复版本
+demo1 测试
 """
 
 import sys

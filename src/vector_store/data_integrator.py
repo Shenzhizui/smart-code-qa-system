@@ -100,7 +100,7 @@ class DataIntegrator:
         
         # 检查常见的数据文件
         data_files = [
-            self.data_dir / "day2_demo_code.json",
+            self.data_dir / "demo2_code.json",
             self.data_dir / "code_files.json",
             self.data_dir / "demo_code_data.json",
         ]
@@ -149,7 +149,7 @@ class DataIntegrator:
         print(f"\n📝 加载Day 3 Issue数据...")
         
         data_files = [
-            self.data_dir / "day3_demo_issues.json",
+            self.data_dir / "demo3_issues.json",
             self.data_dir / "issues.json",
         ]
         
@@ -214,7 +214,7 @@ class DataIntegrator:
         print(f"\n🔀 加载Day 3 PR数据...")
         
         data_files = [
-            self.data_dir / "day3_demo_prs.json",
+            self.data_dir / "demo3_prs.json",
             self.data_dir / "prs.json",
         ]
         
@@ -573,7 +573,7 @@ def create_sample_data():
         }
     ]
     
-    with open(data_dir / "day2_demo_code.json", "w", encoding="utf-8") as f:
+    with open(data_dir / "demo2_code.json", "w", encoding="utf-8") as f:
         json.dump(code_data, f, indent=2)
     
     # 创建Issue数据
@@ -592,7 +592,7 @@ def create_sample_data():
         }
     ]
     
-    with open(data_dir / "day3_demo_issues.json", "w", encoding="utf-8") as f:
+    with open(data_dir / "demo3_issues.json", "w", encoding="utf-8") as f:
         json.dump(issue_data, f, indent=2)
     
     # 创建PR数据
@@ -611,10 +611,10 @@ def create_sample_data():
         }
     ]
     
-    with open(data_dir / "day3_demo_prs.json", "w", encoding="utf-8") as f:
+    with open(data_dir / "demo3_prs.json", "w", encoding="utf-8") as f:
         json.dump(pr_data, f, indent=2)
     
-    print("✅ 示例数据文件已创建在 data/ 目录")
+    print("示例数据文件已创建在 data/ 目录")
 
 
 if __name__ == "__main__":

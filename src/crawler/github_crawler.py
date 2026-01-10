@@ -113,7 +113,7 @@ class GitHubIssue:
             "labels": self.labels,
             "comments": self.comments,
             "url": self.url,
-            "is_pull_request": self.is_pull_request
+            "is_pull_request": bool(self.is_pull_request) if self.is_pull_request is not None else False
         }
     
     def to_text_for_embedding(self) -> str:
@@ -502,7 +502,8 @@ class GitHubCrawler:
                 if count > 0:
                     self._add_delay()
                 
-                is_pr = hasattr(issue, 'pull_request') and issue.pull_request
+                # 检查是否为Pull Request
+                is_pr = bool(hasattr(issue, 'pull_request') and issue.pull_request is not None)
                 
                 body_content = issue.body or ""
                 closed_at_str = str(issue.closed_at) if issue.closed_at else None

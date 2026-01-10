@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Day 4 演示脚本：数据向量化与ChromaDB存储
-在项目根目录运行：python scripts/day4_demo.py
+demo4 演示脚本：数据向量化与ChromaDB存储
+在项目根目录运行：python scripts/demo4.py
 """
 
 import sys
@@ -18,7 +18,7 @@ os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
 
 def main():
     print("=" * 70)
-    print("Day 4 演示：数据向量化与ChromaDB存储")
+    print("demo4 演示：数据向量化与ChromaDB存储")
     print("=" * 70)
     
     # 1. 初始化嵌入模型
@@ -41,6 +41,8 @@ def main():
     
     # 2. 初始化ChromaDB向量存储
     print("\n2. 初始化ChromaDB向量存储...")
+    vector_store = None
+    chromadb_available = False
     try:
         from src.vector_store.chroma_store import ChromaVectorStore
         
@@ -49,10 +51,12 @@ def main():
         print(f"  ChromaDB初始化成功")
         print(f"   存储路径: {vector_store.persist_dir}")
         print(f"   集合名称: {vector_store.collection.name}")
+        chromadb_available = True
         
     except Exception as e:
         print(f"  ChromaDB初始化失败: {e}")
-        return
+        print(f"  将跳过向量存储相关功能，但仍会生成JSON文件")
+        # 不return，继续执行后续代码以生成JSON
     
     # 3. 准备演示数据
     print("\n3. 准备演示数据...")
@@ -114,12 +118,18 @@ def main():
         print(f"   文档{i}: {doc_type} - {doc['text'][:50]}...")
     
     # 4. 添加文档到向量存储
-    print("\n4. 添加文档到向量存储...")
-    vector_store.add_documents(demo_documents)
-    print(f"  成功添加 {len(demo_documents)} 个文档")
+    if chromadb_available and vector_store:
+        print("\n4. 添加文档到向量存储...")
+        try:
+            vector_store.add_documents(demo_documents)
+            print(f"  成功添加 {len(demo_documents)} 个文档")
+        except Exception as e:
+            print(f"  添加文档失败: {e}")
+            chromadb_available = False
+    else:
+        print("\n4. 跳过添加文档到向量存储（ChromaDB不可用）")
     
     # 5. 演示语义搜索
-    print("\n5. 演示语义搜索...")
     test_queries = [
         ("什么是Python？", "查询编程语言"),
         ("向量数据库功能", "查询数据库功能"),
@@ -128,56 +138,64 @@ def main():
         ("人工智能技术", "查询AI技术")
     ]
     
-    for query, description in test_queries:
-        print(f"\n {description}")
-        print(f"   查询: '{query}'")
-        
-        results = vector_store.search(query, n_results=2)
-        
-        if results:
-            for i, result in enumerate(results, 1):
-                doc = result['document']
-                if len(doc) > 60:
-                    doc = doc[:60] + "..."
+    if chromadb_available and vector_store:
+        print("\n5. 演示语义搜索...")
+        for query, description in test_queries:
+            print(f"\n {description}")
+            print(f"   查询: '{query}'")
+            
+            try:
+                results = vector_store.search(query, n_results=2)
                 
-                print(f"   结果{i}: {doc}")
-                print(f"       相似度: {result['score']:.4f}")
-                print(f"       类型: {result['metadata'].get('type')}")
-        else:
-            print("   未找到相关结果")
-    
-    # 6. 演示元数据过滤
-    print("\n6. 演示元数据过滤搜索...")
-    print("   查询: 'Python相关技术'")
-    print("   过滤条件: type='language' OR type='framework'")
-    
-    # 注意：ChromaDB的过滤语法
-    try:
-        results = vector_store.search(
-            "Python相关技术", 
-            n_results=3,
-            filter_metadata={"$or": [{"type": "language"}, {"type": "framework"}]}
-        )
+                if results:
+                    for i, result in enumerate(results, 1):
+                        doc = result['document']
+                        if len(doc) > 60:
+                            doc = doc[:60] + "..."
+                        
+                        print(f"   结果{i}: {doc}")
+                        print(f"       相似度: {result['score']:.4f}")
+                        print(f"       类型: {result['metadata'].get('type')}")
+                else:
+                    print("   未找到相关结果")
+            except Exception as e:
+                print(f"   搜索失败: {e}")
         
-        if results:
-            print(f"   找到 {len(results)} 个过滤结果:")
-            for result in results:
-                doc_type = result['metadata'].get('type', '未知')
-                doc_preview = result['document']
-                if len(doc_preview) > 60:
-                    doc_preview = doc_preview[:60] + "..."
-                print(f"      - {doc_type}: {doc_preview}")
-        else:
-            print("     未找到过滤结果")
-    except Exception as e:
-        print(f"     过滤搜索失败（可能是语法问题）: {e}")
-        # 尝试简单的过滤
+        # 6. 演示元数据过滤
+        print("\n6. 演示元数据过滤搜索...")
+        print("   查询: 'Python相关技术'")
+        print("   过滤条件: type='language' OR type='framework'")
+        
+        # 注意：ChromaDB的过滤语法
         try:
-            results = vector_store.search("Python", n_results=3)
+            results = vector_store.search(
+                "Python相关技术", 
+                n_results=3,
+                filter_metadata={"$or": [{"type": "language"}, {"type": "framework"}]}
+            )
+            
             if results:
-                print(f"   找到 {len(results)} 个相关结果（无过滤）")
-        except:
-            pass
+                print(f"   找到 {len(results)} 个过滤结果:")
+                for result in results:
+                    doc_type = result['metadata'].get('type', '未知')
+                    doc_preview = result['document']
+                    if len(doc_preview) > 60:
+                        doc_preview = doc_preview[:60] + "..."
+                    print(f"      - {doc_type}: {doc_preview}")
+            else:
+                print("     未找到过滤结果")
+        except Exception as e:
+            print(f"     过滤搜索失败（可能是语法问题）: {e}")
+            # 尝试简单的过滤
+            try:
+                results = vector_store.search("Python", n_results=3)
+                if results:
+                    print(f"   找到 {len(results)} 个相关结果（无过滤）")
+            except Exception as search_error:
+                print(f"     简单搜索也失败: {search_error}")
+    else:
+        print("\n5. 跳过语义搜索（ChromaDB不可用）")
+        print("\n6. 跳过元数据过滤搜索（ChromaDB不可用）")
     
     # 7. 初始化数据索引器
     print("\n7. 初始化数据索引器...")
@@ -263,21 +281,30 @@ def main():
     # 9. 保存和显示统计信息
     print("\n9. 保存和显示统计信息...")
     try:
-        # 获取集合信息
-        info = vector_store.get_collection_info()
-        
-        print(f"    向量存储统计:")
-        print(f"   集合名称: {info['collection_name']}")
-        print(f"   文档数量: {info['document_count']}")
-        
         # 保存演示结果
         demo_results = {
             "embedding_model": embedder.model_name,
             "embedding_dimensions": embedder.dimensions,
-            "chromadb_collection": vector_store.collection.name,
-            "document_count": info['document_count'],
-            "test_queries": test_queries
+            "test_queries": test_queries,
+            "chromadb_available": chromadb_available
         }
+        
+        if chromadb_available and vector_store:
+            try:
+                info = vector_store.get_collection_info()
+                print(f"    向量存储统计:")
+                print(f"   集合名称: {info['collection_name']}")
+                print(f"   文档数量: {info['document_count']}")
+                demo_results["chromadb_collection"] = vector_store.collection.name
+                demo_results["document_count"] = info['document_count']
+            except Exception as e:
+                print(f"    获取集合信息失败: {e}")
+                demo_results["chromadb_collection"] = "day4_demo_collection"
+                demo_results["document_count"] = 0
+        else:
+            print(f"    向量存储: ChromaDB不可用")
+            demo_results["chromadb_collection"] = None
+            demo_results["document_count"] = 0
         
         output_file = "data/demo4_results.json"
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -304,7 +331,7 @@ def main():
         print("   演示数据已保留")
     
     print("\n" + "=" * 70)
-    print("  Day 4 演示完成！")
+    print("  demo4 演示完成！")
     print("=" * 70)
     
     print("\n 完成的功能:")
@@ -318,10 +345,10 @@ def main():
     print("8. 结果保存与统计")
     
     print("\n  下一步:")
-    print("1. 运行完整测试: python test_day4.py")
-    print("2. 集成Day 2的代码数据")
-    print("3. 集成Day 3的Issue和PR数据")
-    print("4. 准备Day 5：问答引擎开发")
+    print("1. 运行完整测试: python tests/test4.py")
+    print("2. 集成demo2的代码数据")
+    print("3. 集成demo3的Issue和PR数据")
+    print("4. 准备demo5：问答引擎开发")
     
     print("\n  创建的目录和文件:")
     print(f"   • chroma_data/ - ChromaDB存储目录")

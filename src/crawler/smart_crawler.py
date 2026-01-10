@@ -150,7 +150,8 @@ class SmartGitHubCrawler(GitHubCrawler):
         """转换PyGithub Issue对象为GitHubIssue"""
         body_content = issue.body or ""
         closed_at_str = str(issue.closed_at) if issue.closed_at else None
-        is_pr = hasattr(issue, 'pull_request') and issue.pull_request
+        # 检查是否为Pull Request
+        is_pr = bool(hasattr(issue, 'pull_request') and issue.pull_request is not None)
         
         return GitHubIssue(
             number=issue.number,

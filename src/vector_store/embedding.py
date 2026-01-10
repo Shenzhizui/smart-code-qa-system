@@ -41,8 +41,8 @@ class TextEmbeddingModel:
         """
         self.model_name = model_name
         
-        print(f"🔧 正在加载嵌入模型: {model_name}")
-        print(f"   使用镜像源: {os.environ.get('HF_ENDPOINT', '默认')}")
+        print(f"正在加载嵌入模型: {model_name}")
+        print(f"使用镜像源: {os.environ.get('HF_ENDPOINT', '默认')}")
         
         # 检查模型是否在本地缓存中
         self._check_local_cache()

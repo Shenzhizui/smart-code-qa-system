@@ -5,6 +5,7 @@
 
 import sys
 import os
+import json
 from pathlib import Path
 
 # 添加项目根目录到Python路径
@@ -47,7 +48,7 @@ def main():
         # 显示前5个
         print("   前5个条目:")
         for i, item in enumerate(contents[:5]):
-            type_icon = "" if item.type == "dir" else ""
+            type_icon = "[DIR]" if item.type == "dir" else "[FILE]"
             print(f"   {type_icon} {item.name} ({item.type}, {item.size} bytes)")
     else:
         print("未获取到目录内容")
@@ -110,12 +111,88 @@ def main():
     
     chunks = processor.split_text(test_text, metadata)
     print(f"文本分割测试:")
-    print(f": {len(test_text)} 字符")
+    print(f"  原始文本: {len(test_text)} 字符")
     print(f"分割为: {len(chunks)} 个块")
     
     if chunks:
         print(f"第一个块: {chunks[0].content[:50]}...")
         print(f"元数据: {chunks[0].metadata.get('repository')}")
+    
+    # 保存数据到JSON文件
+    print("\n8. 保存数据到JSON文件...")
+    try:
+        demo2_data = {
+            "test_repository": test_repo,
+            "directory_contents": [],
+            "file_content": None,
+            "statistics": None,
+            "data_processing": {
+                "original_content_length": None,
+                "cleaned_content_length": None,
+                "text_chunks": []
+            }
+        }
+        
+        # 保存目录内容
+        if contents:
+            for item in contents[:10]:  # 只保存前10个
+                demo2_data["directory_contents"].append({
+                    "name": item.name,
+                    "path": item.path,
+                    "type": item.type,
+                    "size": item.size,
+                    "sha": item.sha,
+                    "url": item.url
+                })
+        
+        # 保存文件内容（如果获取到）
+        if first_file and content:
+            demo2_data["file_content"] = {
+                "file_name": first_file.name,
+                "file_path": first_file.path,
+                "content_preview": content[:200] + "..." if len(content) > 200 else content,
+                "content_length": len(content)
+            }
+            demo2_data["data_processing"]["original_content_length"] = len(content)
+            if cleaned_content:
+                demo2_data["data_processing"]["cleaned_content_length"] = len(cleaned_content)
+        
+        # 保存统计信息
+        if stats:
+            demo2_data["statistics"] = {
+                "total_files": stats.get('total_files', 0),
+                "total_directories": stats.get('total_directories', 0),
+                "code_files": stats.get('code_files', 0),
+                "total_lines": stats.get('total_lines', 0),
+                "file_extensions": stats.get('file_extensions', {})
+            }
+        
+        # 保存文本分割结果
+        if chunks:
+            demo2_data["data_processing"]["text_chunks"] = []
+            for i, chunk in enumerate(chunks[:3]):  # 只保存前3个块
+                demo2_data["data_processing"]["text_chunks"].append({
+                    "chunk_index": i,
+                    "content_preview": chunk.content[:100] + "..." if len(chunk.content) > 100 else chunk.content,
+                    "content_length": len(chunk.content),
+                    "metadata": {
+                        "repository": chunk.metadata.get('repository'),
+                        "file_path": chunk.metadata.get('file_path'),
+                        "source_type": chunk.metadata.get('source_type')
+                    }
+                })
+        
+        # 保存到文件
+        output_file = "data/demo2_results.json"
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(demo2_data, f, ensure_ascii=False, indent=2)
+        
+        print(f"  数据已保存到 {output_file}")
+        
+    except Exception as e:
+        print(f"  保存数据时出错: {e}")
     
     print("\n" + "=" * 70)
     print(" demo2 演示完成！")

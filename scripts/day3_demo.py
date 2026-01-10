@@ -22,19 +22,19 @@ def main():
     try:
         from src.crawler.github_crawler import GitHubCrawler
         crawler = GitHubCrawler()
-        print("✅ GitHubCrawler初始化成功")
+        print("  GitHubCrawler初始化成功")
     except ImportError as e:
-        print(f"❌ 导入失败: {e}")
+        print(f"  导入失败: {e}")
         return
     
     # 2. 测试连接
     print("\n2. 测试GitHub连接...")
     if not crawler.is_connected():
-        print("❌ GitHub未连接，请检查GITHUB_TOKEN配置")
+        print("  GitHub未连接，请检查GITHUB_TOKEN配置")
         return
     
     if not crawler.test_connection():
-        print("❌ GitHub连接测试失败")
+        print("  GitHub连接测试失败")
         return
     
     # 3. 选择测试仓库
@@ -45,19 +45,19 @@ def main():
     print("\n4. 获取仓库信息...")
     repo_info = crawler.get_repository_info(test_repo)
     if repo_info:
-        print(f"   ✅ 仓库: {repo_info.full_name}")
+        print(f"   仓库: {repo_info.full_name}")
         print(f"      描述: {repo_info.description}")
         print(f"      Stars: {repo_info.stars}")
         print(f"      Forks: {repo_info.forks}")
     else:
-        print("   ❌ 获取仓库信息失败")
+        print("     获取仓库信息失败")
     
     # 5. 安全获取Issue列表（严格限制数量）
     print("\n5. 获取Issue列表（限制10个）...")
     issues = crawler.get_issues(test_repo, state="all", limit=10)
     
     if issues:
-        print(f"   ✅ 获取到 {len(issues)} 个Issue")
+        print(f"   获取到 {len(issues)} 个Issue")
         
         # 显示前3个Issue
         print("   前3个Issue:")
@@ -66,7 +66,7 @@ def main():
             print(f"   #{issue.number}{pr_mark}: {issue.title[:50]}...")
             print(f"      状态: {issue.state}, 评论: {issue.comments}")
     else:
-        print("   ❌ 未获取到Issue")
+        print("     未获取到Issue")
     
     # 6. 选择性获取评论（只获取前2个有评论的Issue）
     print("\n6. 选择性获取评论...")
@@ -84,20 +84,20 @@ def main():
                 comments = crawler.get_issue_comments(test_repo, issue.number, max_comments=3)
                 
                 if comments:
-                    print(f"      ✅ 获取到 {len(comments)} 条评论")
+                    print(f"      获取到 {len(comments)} 条评论")
                     for j, comment in enumerate(comments[:2]):  # 只显示前2条
                         print(f"         {j+1}. {comment.user}: {comment.body[:50]}...")
                 else:
-                    print(f"      ⚠ 未获取到评论或没有评论")
+                    print(f"       未获取到评论或没有评论")
         else:
-            print("   ⚠ 没有找到有评论的Issue")
+            print("    没有找到有评论的Issue")
     
     # 7. 获取PR数据（限制数量）
     print("\n7. 获取Pull Request数据（限制5个）...")
     prs = crawler.get_pull_requests(test_repo, state="all", limit=5)
     
     if prs:
-        print(f"   ✅ 获取到 {len(prs)} 个Pull Request")
+        print(f"   获取到 {len(prs)} 个Pull Request")
         
         # 显示统计
         merged_count = sum(1 for pr in prs if pr.merged)
@@ -109,7 +109,7 @@ def main():
             print(f"      示例PR: #{pr.number} - {pr.title[:50]}...")
             print(f"          变更: +{pr.additions}/-{pr.deletions} ({pr.changed_files}个文件)")
     else:
-        print("   ❌ 未获取到PR")
+        print("     未获取到PR")
     
     # 8. 保存数据
     print("\n8. 保存数据到文件...")
@@ -127,7 +127,7 @@ def main():
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(issues_data, f, ensure_ascii=False, indent=2)
             
-            print(f"   ✅ Issue数据已保存到 {output_file}")
+            print(f"   Issue数据已保存到 {output_file}")
         
         # 保存PR数据
         if prs:
@@ -139,10 +139,10 @@ def main():
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(prs_data, f, ensure_ascii=False, indent=2)
             
-            print(f"   ✅ PR数据已保存到 {output_file}")
+            print(f"   PR数据已保存到 {output_file}")
     
     except Exception as e:
-        print(f"   ⚠ 保存数据时出错: {e}")
+        print(f"     保存数据时出错: {e}")
     
     # 9. 运行简单的仓库分析
     print("\n9. 运行仓库分析...")
@@ -157,24 +157,22 @@ def main():
         print(f"   PR数量: {pr_count} ({pr_count/len(issues)*100:.1f}%)")
     
     print("\n" + "=" * 70)
-    print("✅ Day 3 演示完成！")
+    print("  Day 3 演示完成！")
     print("=" * 70)
     
-    print("\n📊 安全完成的功能:")
-    print("1. ✅ GitHub连接测试")
-    print("2. ✅ 仓库信息获取")
-    print("3. ✅ Issue数据获取（限制数量）")
-    print("4. ✅ 评论选择性获取")
-    print("5. ✅ PR数据获取（限制数量）")
-    print("6. ✅ 数据保存到文件")
-    print("7. ✅ 简单统计分析")
+    print("\n安全完成的功能:")
+    print("1. GitHub连接测试")
+    print("2. 仓库信息获取")
+    print("3. Issue数据获取（限制数量）")
+    print("4. 评论选择性获取")
+    print("5. PR数据获取（限制数量）")
+    print("6. 数据保存到文件")
+    print("7. 简单统计分析")
 
-    print("\n🚀 下一步:")
+    print("\n  下一步:")
     print("1. 运行测试: python tests/test_day2.py")
     print("2. 提交代码: git add . && git commit -m 'Day 3完成'")
     print("3. 准备Day 4: 数据向量化与向量数据库存储")
     
-    print("\n⚠ 注意: 为避免无限循环，所有获取操作都有严格的数量限制")
-
 if __name__ == "__main__":
     main()

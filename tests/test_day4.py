@@ -20,23 +20,23 @@ def test_imports():
     
     try:
         from src.vector_store.embedding import TextEmbeddingModel
-        print("✅ TextEmbeddingModel")
+        print("  TextEmbeddingModel")
     except Exception as e:
-        print(f"❌ 嵌入模型导入失败: {e}")
+        print(f"  嵌入模型导入失败: {e}")
         return False
     
     try:
         from src.vector_store.chroma_store import ChromaVectorStore
-        print("✅ ChromaVectorStore")
+        print("  ChromaVectorStore")
     except Exception as e:
-        print(f"❌ ChromaDB存储导入失败: {e}")
+        print(f"  ChromaDB存储导入失败: {e}")
         return False
     
     try:
         from src.vector_store.indexer import DataIndexer
-        print("✅ DataIndexer")
+        print("  DataIndexer")
     except Exception as e:
-        print(f"❌ 数据索引器导入失败: {e}")
+        print(f"  数据索引器导入失败: {e}")
         return False
     
     return True
@@ -53,15 +53,15 @@ def test_embedding_model():
         embedder = TextEmbeddingModel()
         
         if embedder.model_name:
-            print(f"  ✅ 模型名称: {embedder.model_name}")
+            print(f"    模型名称: {embedder.model_name}")
         else:
-            print("  ❌ 模型名称获取失败")
+            print("    模型名称获取失败")
             return False
         
         if embedder.dimensions > 0:
-            print(f"  ✅ 嵌入维度: {embedder.dimensions}")
+            print(f"    嵌入维度: {embedder.dimensions}")
         else:
-            print("  ❌ 嵌入维度获取失败")
+            print("    嵌入维度获取失败")
             return False
         
         # 测试单个文本嵌入
@@ -70,9 +70,9 @@ def test_embedding_model():
         embedding = embedder.get_embedding(text)
         
         if embedding.shape == (embedder.dimensions,):
-            print(f"  ✅ 单个嵌入形状: {embedding.shape}")
+            print(f"    单个嵌入形状: {embedding.shape}")
         else:
-            print(f"  ❌ 嵌入形状错误: {embedding.shape}")
+            print(f"    嵌入形状错误: {embedding.shape}")
             return False
         
         # 测试批量文本嵌入
@@ -81,9 +81,9 @@ def test_embedding_model():
         embeddings = embedder.get_embeddings(texts)
         
         if embeddings.shape == (3, embedder.dimensions):
-            print(f"  ✅ 批量嵌入形状: {embeddings.shape}")
+            print(f"    批量嵌入形状: {embeddings.shape}")
         else:
-            print(f"  ❌ 批量嵌入形状错误: {embeddings.shape}")
+            print(f"    批量嵌入形状错误: {embeddings.shape}")
             return False
         
         # 测试相似度计算
@@ -91,16 +91,16 @@ def test_embedding_model():
         similarities = embedder.compute_similarity("测试", texts)
         
         if len(similarities) == 3:
-            print(f"  ✅ 相似度数量: {len(similarities)}")
+            print(f"    相似度数量: {len(similarities)}")
             print(f"     相似度值: {[f'{s:.4f}' for s in similarities]}")
         else:
-            print(f"  ❌ 相似度数量错误: {len(similarities)}")
+            print(f"    相似度数量错误: {len(similarities)}")
             return False
         
         return True
         
     except Exception as e:
-        print(f"❌ 嵌入模型测试失败: {e}")
+        print(f"  嵌入模型测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -111,9 +111,9 @@ def test_chromadb():
     
     try:
         import chromadb
-        print("  ✅ chromadb库可用")
+        print("    chromadb库可用")
     except ImportError as e:
-        print(f"  ❌ chromadb库未安装: {e}")
+        print(f"    chromadb库未安装: {e}")
         return False
     
     try:
@@ -124,15 +124,15 @@ def test_chromadb():
         store = ChromaVectorStore("test_collection_fixed")
         
         if store.client:
-            print("  ✅ ChromaDB客户端初始化成功")
+            print("    ChromaDB客户端初始化成功")
         else:
-            print("  ❌ ChromaDB客户端初始化失败")
+            print("    ChromaDB客户端初始化失败")
             return False
         
         if store.collection:
-            print(f"  ✅ 集合创建成功: {store.collection.name}")
+            print(f"    集合创建成功: {store.collection.name}")
         else:
-            print("  ❌ 集合创建失败")
+            print("    集合创建失败")
             return False
         
         # 测试添加文档
@@ -149,14 +149,14 @@ def test_chromadb():
         ]
         
         store.add_documents(test_documents)
-        print("  ✅ 文档添加成功")
+        print("    文档添加成功")
         
         # 测试搜索
         print("  测试语义搜索...")
         results = store.search("测试文档", n_results=2)
         
         if results:
-            print(f"  ✅ 搜索成功，找到 {len(results)} 个结果")
+            print(f"    搜索成功，找到 {len(results)} 个结果")
             for i, result in enumerate(results, 1):
                 score = result['score']
                 # 检查相似度是否在合理范围
@@ -165,7 +165,7 @@ def test_chromadb():
                 else:
                     print(f"     结果{i}: 相似度={score:.4f} (异常)")
         else:
-            print("  ❌ 搜索无结果")
+            print("    搜索无结果")
             return False
         
         # 测试集合信息
@@ -173,23 +173,23 @@ def test_chromadb():
         info = store.get_collection_info()
         
         if "collection_name" in info and "document_count" in info:
-            print(f"  ✅ 集合信息获取成功")
+            print(f"    集合信息获取成功")
             print(f"     集合: {info['collection_name']}")
             print(f"     文档数: {info['document_count']}")
             
             if info['document_count'] == 2:
-                print("  ✅ 文档数量正确")
+                print("    文档数量正确")
             else:
-                print(f"  ❌ 文档数量错误: {info['document_count']}")
+                print(f"    文档数量错误: {info['document_count']}")
                 return False
         else:
-            print(f"  ❌ 集合信息获取失败: {info}")
+            print(f"    集合信息获取失败: {info}")
             return False
         
         return True
         
     except Exception as e:
-        print(f"❌ ChromaDB测试失败: {e}")
+        print(f"  ChromaDB测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -206,9 +206,9 @@ def test_indexer():
         indexer = DataIndexer("test_indexer_fixed")
         
         if indexer.vector_store:
-            print("  ✅ 数据索引器初始化成功")
+            print("    数据索引器初始化成功")
         else:
-            print("  ❌ 数据索引器初始化失败")
+            print("    数据索引器初始化失败")
             return False
         
         # 测试代码文件索引
@@ -225,7 +225,7 @@ def test_indexer():
         ]
         
         indexer.index_code_files(code_files)
-        print("  ✅ 代码文件索引成功")
+        print("    代码文件索引成功")
         
         # 测试Issue索引
         print("  测试Issue索引...")
@@ -245,7 +245,7 @@ def test_indexer():
         ]
         
         indexer.index_issues(issues)
-        print("  ✅ Issue索引成功")
+        print("    Issue索引成功")
         
         # 测试PR索引（修复布尔值问题）
         print("  测试Pull Request索引...")
@@ -265,7 +265,7 @@ def test_indexer():
         ]
         
         indexer.index_pull_requests(prs)
-        print("  ✅ Pull Request索引成功")
+        print("    Pull Request索引成功")
         
         # 测试获取向量存储
         print("  测试获取向量存储...")
@@ -274,18 +274,18 @@ def test_indexer():
         if vector_store:
             info = vector_store.get_collection_info()
             if info['document_count'] >= 3:
-                print(f"  ✅ 向量存储获取成功，文档数: {info['document_count']}")
+                print(f"    向量存储获取成功，文档数: {info['document_count']}")
                 return True
             else:
-                print(f"  ⚠ 文档数不足: {info['document_count']}")
+                print(f"    文档数不足: {info['document_count']}")
                 # 仍然返回True，因为索引过程成功了
                 return True
         else:
-            print("  ❌ 向量存储获取失败")
+            print("    向量存储获取失败")
             return False
         
     except Exception as e:
-        print(f"❌ 数据索引器测试失败: {e}")
+        print(f"  数据索引器测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -308,13 +308,13 @@ def test_integration():
         # 重置集合确保干净的测试环境
         try:
             store.reset_collection()
-            print("  ✅ 集合重置成功")
+            print("    集合重置成功")
         except:
-            print("  ⚠ 集合重置失败（可能是新集合）")
+            print("    集合重置失败（可能是新集合）")
         
         indexer = DataIndexer("integration_test_index_fixed")
         
-        print("  ✅ 所有组件初始化成功")
+        print("    所有组件初始化成功")
         print(f"     嵌入模型: {embedder.model_name}")
         print(f"     向量存储: {store.collection.name}")
         print(f"     数据索引器: 就绪")
@@ -329,30 +329,30 @@ def test_integration():
         ]
         
         store.add_documents(test_docs)
-        print("  ✅ 文档添加成功")
+        print("    文档添加成功")
         
         # 搜索相关的内容
         results = store.search("集成测试文档", n_results=1)
         
         if results:
             score = results[0]['score']
-            print(f"  ✅ 集成测试成功，找到结果")
+            print(f"    集成测试成功，找到结果")
             print(f"     相似度: {score:.4f}")
             
             # 检查相似度是否在合理范围
             if 0 <= score <= 1:
-                print("  ✅ 相似度在合理范围内")
+                print("    相似度在合理范围内")
                 return True
             else:
-                print(f"  ⚠ 相似度异常: {score:.4f}")
+                print(f"    相似度异常: {score:.4f}")
                 # 仍然算成功，因为核心功能正常
                 return True
         else:
-            print("  ❌ 集成测试失败，搜索无结果")
+            print("    集成测试失败，搜索无结果")
             return False
         
     except Exception as e:
-        print(f"❌ 集成测试失败: {e}")
+        print(f"  集成测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -368,8 +368,8 @@ def run_embedding_demo():
         print("  运行嵌入模型演示...")
         embedder = TextEmbeddingModel()
         
-        print(f"  ✅ 模型: {embedder.model_name}")
-        print(f"  ✅ 维度: {embedder.dimensions}")
+        print(f"    模型: {embedder.model_name}")
+        print(f"    维度: {embedder.dimensions}")
         
         # 测试中英文混合
         texts = [
@@ -379,17 +379,17 @@ def run_embedding_demo():
         ]
         
         embeddings = embedder.get_embeddings(texts)
-        print(f"  ✅ 处理 {len(texts)} 个文本")
-        print(f"  ✅ 嵌入形状: {embeddings.shape}")
+        print(f"    处理 {len(texts)} 个文本")
+        print(f"    嵌入形状: {embeddings.shape}")
         
         # 测试相似度
         similarities = embedder.compute_similarity("编程语言", texts)
-        print(f"  ✅ 相似度计算成功")
+        print(f"    相似度计算成功")
         
         return True
         
     except Exception as e:
-        print(f"❌ 嵌入模型演示失败: {e}")
+        print(f"  嵌入模型演示失败: {e}")
         return False
 
 def main():
@@ -414,7 +414,7 @@ def main():
             success = test_func()
             results.append((test_name, success))
         except Exception as e:
-            print(f"❌ 测试异常: {e}")
+            print(f"  测试异常: {e}")
             results.append((test_name, False))
     
     # 总结
@@ -426,7 +426,7 @@ def main():
     total = len(results)
     
     for test_name, success in results:
-        status = "✅" if success else "❌"
+        status = " " if success else " "
         print(f"{status} {test_name}")
     
     print(f"\n通过: {passed}/{total}")
@@ -435,10 +435,10 @@ def main():
         print("\n🎉 所有测试通过！")
         print("\n运行演示: python scripts/day4_demo.py")
     elif passed >= 4:
-        print(f"\n⚠ {total - passed} 个测试失败，但核心功能正常")
+        print(f"\n  {total - passed} 个测试失败，但核心功能正常")
         print("\n仍然可以运行演示: python scripts/day4_demo.py")
     else:
-        print(f"\n❌ {total - passed} 个测试失败，需要修复")
+        print(f"\n  {total - passed} 个测试失败，需要修复")
     
     print("\n" + "=" * 60)
 

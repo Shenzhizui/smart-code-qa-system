@@ -26,7 +26,7 @@ def main():
     try:
         from src.vector_store.embedding import TextEmbeddingModel
         embedder = TextEmbeddingModel()
-        print(f"✅ 嵌入模型加载成功: {embedder.model_name}")
+        print(f"  嵌入模型加载成功: {embedder.model_name}")
         print(f"   维度: {embedder.dimensions}")
         
         # 测试嵌入
@@ -36,7 +36,7 @@ def main():
         print(f"   向量形状: {embedding.shape}")
         
     except ImportError as e:
-        print(f"❌ 导入失败: {e}")
+        print(f"  导入失败: {e}")
         return
     
     # 2. 初始化ChromaDB向量存储
@@ -46,12 +46,12 @@ def main():
         
         # 使用演示专用集合
         vector_store = ChromaVectorStore("day4_demo_collection")
-        print(f"✅ ChromaDB初始化成功")
+        print(f"  ChromaDB初始化成功")
         print(f"   存储路径: {vector_store.persist_dir}")
         print(f"   集合名称: {vector_store.collection.name}")
         
     except Exception as e:
-        print(f"❌ ChromaDB初始化失败: {e}")
+        print(f"  ChromaDB初始化失败: {e}")
         return
     
     # 3. 准备演示数据
@@ -108,7 +108,7 @@ def main():
         }
     ]
     
-    print(f"✅ 准备了 {len(demo_documents)} 个演示文档")
+    print(f"  准备了 {len(demo_documents)} 个演示文档")
     for i, doc in enumerate(demo_documents, 1):
         doc_type = doc["metadata"]["type"]
         print(f"   文档{i}: {doc_type} - {doc['text'][:50]}...")
@@ -116,7 +116,7 @@ def main():
     # 4. 添加文档到向量存储
     print("\n4. 添加文档到向量存储...")
     vector_store.add_documents(demo_documents)
-    print(f"✅ 成功添加 {len(demo_documents)} 个文档")
+    print(f"  成功添加 {len(demo_documents)} 个文档")
     
     # 5. 演示语义搜索
     print("\n5. 演示语义搜索...")
@@ -129,7 +129,7 @@ def main():
     ]
     
     for query, description in test_queries:
-        print(f"\n   📝 {description}")
+        print(f"\n {description}")
         print(f"   查询: '{query}'")
         
         results = vector_store.search(query, n_results=2)
@@ -160,7 +160,7 @@ def main():
         )
         
         if results:
-            print(f"   ✅ 找到 {len(results)} 个过滤结果:")
+            print(f"   找到 {len(results)} 个过滤结果:")
             for result in results:
                 doc_type = result['metadata'].get('type', '未知')
                 doc_preview = result['document']
@@ -168,9 +168,9 @@ def main():
                     doc_preview = doc_preview[:60] + "..."
                 print(f"      - {doc_type}: {doc_preview}")
         else:
-            print("   ⚠ 未找到过滤结果")
+            print("     未找到过滤结果")
     except Exception as e:
-        print(f"   ⚠ 过滤搜索失败（可能是语法问题）: {e}")
+        print(f"     过滤搜索失败（可能是语法问题）: {e}")
         # 尝试简单的过滤
         try:
             results = vector_store.search("Python", n_results=3)
@@ -185,10 +185,10 @@ def main():
         from src.vector_store.indexer import DataIndexer
         
         indexer = DataIndexer("day4_demo_indexer")
-        print("✅ 数据索引器初始化成功")
+        print("  数据索引器初始化成功")
         
         # 显示支持的数据类型
-        print("\n   📚 支持的数据类型:")
+        print("\n  支持的数据类型:")
         print("   • 代码文件 (.py, .js, .java, .cpp 等)")
         print("   • GitHub Issues (问题跟踪)")
         print("   • Pull Requests (代码合并请求)")
@@ -196,7 +196,7 @@ def main():
         print("   • 代码注释 (函数和类文档)")
         
     except Exception as e:
-        print(f"❌ 数据索引器初始化失败: {e}")
+        print(f"  数据索引器初始化失败: {e}")
     
     # 8. 演示模拟数据索引
     print("\n8. 演示模拟数据索引...")
@@ -248,7 +248,7 @@ def main():
         print("   索引Issues...")
         indexer.index_issues(issues)
         
-        print("✅ 模拟数据索引完成")
+        print("  模拟数据索引完成")
         
         # 演示搜索
         vector_store = indexer.get_vector_store()
@@ -258,7 +258,7 @@ def main():
             print(f"   搜索'国际化'找到结果，相似度: {results[0]['score']:.4f}")
         
     except Exception as e:
-        print(f"❌ 模拟数据索引失败: {e}")
+        print(f"  模拟数据索引失败: {e}")
     
     # 9. 保存和显示统计信息
     print("\n9. 保存和显示统计信息...")
@@ -266,7 +266,7 @@ def main():
         # 获取集合信息
         info = vector_store.get_collection_info()
         
-        print(f"   📊 向量存储统计:")
+        print(f"    向量存储统计:")
         print(f"   集合名称: {info['collection_name']}")
         print(f"   文档数量: {info['document_count']}")
         
@@ -285,45 +285,45 @@ def main():
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(demo_results, f, ensure_ascii=False, indent=2)
         
-        print(f"   ✅ 演示结果已保存到 {output_file}")
+        print(f"   演示结果已保存到 {output_file}")
         
     except Exception as e:
-        print(f"   ⚠ 保存统计信息时出错: {e}")
+        print(f"     保存统计信息时出错: {e}")
     
     # 10. 清理演示数据（可选）
     print("\n10. 清理演示数据（可选）...")
-    cleanup = input("   是否清理演示数据？(y/N): ").strip().lower()
+    cleanup = input("   是否清理演示数据？(Y/N): ").strip().lower()
     
-    if cleanup == 'y':
+    if cleanup == 'Y':
         try:
             vector_store.reset_collection()
-            print("   ✅ 演示数据已清理")
+            print("   演示数据已清理")
         except Exception as e:
-            print(f"   ⚠ 清理数据时出错: {e}")
+            print(f"     清理数据时出错: {e}")
     else:
-        print("   ✅ 演示数据已保留")
+        print("   演示数据已保留")
     
     print("\n" + "=" * 70)
-    print("✅ Day 4 演示完成！")
+    print("  Day 4 演示完成！")
     print("=" * 70)
     
-    print("\n📊 完成的功能:")
-    print("1. ✅ 嵌入模型初始化与测试")
-    print("2. ✅ ChromaDB向量存储初始化")
-    print("3. ✅ 文档向量化与存储")
-    print("4. ✅ 语义搜索功能演示")
-    print("5. ✅ 元数据过滤搜索（基础）")
-    print("6. ✅ 数据索引器初始化")
-    print("7. ✅ 模拟数据索引流程")
-    print("8. ✅ 结果保存与统计")
+    print("\n 完成的功能:")
+    print("1. 嵌入模型初始化与测试")
+    print("2. ChromaDB向量存储初始化")
+    print("3. 文档向量化与存储")
+    print("4. 语义搜索功能演示")
+    print("5. 元数据过滤搜索（基础）")
+    print("6. 数据索引器初始化")
+    print("7. 模拟数据索引流程")
+    print("8. 结果保存与统计")
     
-    print("\n🚀 下一步:")
+    print("\n  下一步:")
     print("1. 运行完整测试: python test_day4.py")
     print("2. 集成Day 2的代码数据")
     print("3. 集成Day 3的Issue和PR数据")
     print("4. 准备Day 5：问答引擎开发")
     
-    print("\n📋 创建的目录和文件:")
+    print("\n  创建的目录和文件:")
     print(f"   • chroma_data/ - ChromaDB存储目录")
     print(f"   • models/ - 模型缓存目录")
     print(f"   • data/day4_demo_results.json - 演示结果")

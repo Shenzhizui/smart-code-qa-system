@@ -23,9 +23,9 @@ sys.path.insert(0, str(project_root))
 # 现在可以导入config模块
 try:
     from config.settings import GITHUB_TOKEN
-    print(f"✅ 从config.settings导入成功")
+    print(f"  从config.settings导入成功")
 except ImportError as e:
-    print(f"❌ 导入config.settings失败: {e}")
+    print(f" 导入config.settings失败: {e}")
     print("尝试直接从环境变量读取...")
     from dotenv import load_dotenv
     load_dotenv(project_root / '.env')
@@ -232,7 +232,7 @@ class GitHubCrawler:
         try:
             from github import Github
             self.github = Github(self.token, per_page=100)  # 每页100条
-            logger.info("✅ GitHub API 初始化成功")
+            logger.info("  GitHub API 初始化成功")
         except ImportError:
             logger.error("请安装PyGithub: pip install PyGithub==2.1.1")
             self.github = None
@@ -251,10 +251,10 @@ class GitHubCrawler:
         
         try:
             user = self.github.get_user()
-            logger.info(f"✅ GitHub连接成功: {user.login}")
+            logger.info(f"  GitHub连接成功: {user.login}")
             return True
         except Exception as e:
-            logger.error(f"❌ GitHub连接失败: {e}")
+            logger.error(f" GitHub连接失败: {e}")
             return False
     
     def _add_delay(self):
@@ -282,11 +282,11 @@ class GitHubCrawler:
                 language=repo.language or "未知"
             )
             
-            logger.info(f"✅ 获取仓库信息成功: {repo.full_name}")
+            logger.info(f"  获取仓库信息成功: {repo.full_name}")
             return info
             
         except Exception as e:
-            logger.error(f"❌ 获取仓库失败 {repo_name}: {e}")
+            logger.error(f" 获取仓库失败 {repo_name}: {e}")
             return None
     
     def get_readme(self, repo_name: str) -> Optional[str]:
@@ -298,7 +298,7 @@ class GitHubCrawler:
             repo = self.github.get_repo(repo_name)
             readme = repo.get_readme()
             content = readme.decoded_content.decode('utf-8')
-            logger.info(f"✅ 找到README文件")
+            logger.info(f"  找到README文件")
             return content
         except:
             logger.warning("⚠ 未找到README文件")
@@ -608,10 +608,10 @@ class GitHubCrawler:
         issues = self.get_issues(repo_name, state="all", limit=issue_limit)
         
         if not issues:
-            print("❌ 没有获取到Issue数据")
+            print(" 没有获取到Issue数据")
             return []
         
-        print(f"✅ 获取到 {len(issues)} 个Issue")
+        print(f"  获取到 {len(issues)} 个Issue")
         
         # 只处理有评论的Issue（最多5个）
         issues_with_comments = [i for i in issues if i.comments > 0][:5]
@@ -639,7 +639,7 @@ class GitHubCrawler:
                 )
                 
                 if comments:
-                    print(f"   ✅ 获取到 {len(comments)} 条评论")
+                    print(f"     获取到 {len(comments)} 条评论")
                     
                     # 转换Issue为字典
                     issue_dict = issue.to_dict()
@@ -656,7 +656,7 @@ class GitHubCrawler:
             else:
                 print("   ⚠ 无评论，跳过")
         
-        print(f"\n✅ 完成! 共处理 {len(results)} 个Issue")
+        print(f"\n  完成! 共处理 {len(results)} 个Issue")
         return results
     
     def save_issues_to_json(self, issues: List[Dict[str, Any]], 
@@ -669,22 +669,22 @@ class GitHubCrawler:
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(issues, f, ensure_ascii=False, indent=2)
             
-            print(f"✅ Issue数据已保存到 {filename} (共 {len(issues)} 个)")
+            print(f"  Issue数据已保存到 {filename} (共 {len(issues)} 个)")
             return True
             
         except Exception as e:
-            print(f"❌ 保存Issue数据失败: {e}")
+            print(f" 保存Issue数据失败: {e}")
             return False
     
     def analyze_repository_issues(self, repo_name: str):
         """分析仓库的Issue状况（快速分析）"""
-        print(f"\n📊 分析仓库 {repo_name} 的Issue状况...")
+        print(f"\n  分析仓库 {repo_name} 的Issue状况...")
         
         # 只获取少量数据进行快速分析
         issues = self.get_issues(repo_name, state="all", limit=50, use_cache=True)
         
         if not issues:
-            print("❌ 没有获取到Issue数据")
+            print(" 没有获取到Issue数据")
             return
         
         # 统计信息
@@ -798,7 +798,7 @@ class GitHubCrawler:
         self.comment_cache.clear()
         self.issue_cache.clear()
         self.pr_cache.clear()
-        print("✅ 已清空所有缓存")
+        print("  已清空所有缓存")
 
 if __name__ == "__main__":
     print("=" * 60)

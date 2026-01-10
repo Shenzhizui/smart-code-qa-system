@@ -378,7 +378,7 @@ def test_issue_processor():
     print(f"   摘要:\n{summary}")
     
     print("\n" + "=" * 60)
-    print("✅ Issue处理器测试完成")
+    print("  Issue处理器测试完成")
     print("=" * 60)
 
 if __name__ == "__main__":

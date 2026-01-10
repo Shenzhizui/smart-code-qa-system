@@ -22,7 +22,7 @@ try:
     SENTENCE_TRANSFORMERS_AVAILABLE = True
 except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
-    print("⚠️  sentence-transformers 不可用，将使用离线模式")
+    print("  sentence-transformers 不可用，将使用离线模式")
 
 
 class TextEmbeddingModel:
@@ -55,18 +55,18 @@ class TextEmbeddingModel:
                     cache_folder="./models",
                     device='cpu'
                 )
-                print(f"✅ 模型加载成功！")
+                print(f"  模型加载成功！")
                 
                 # 测试获取维度
                 test_embedding = self.model.encode(["测试文本"])
                 self.dimensions = test_embedding.shape[1]
-                print(f"✅ 嵌入维度: {self.dimensions}")
+                print(f"  嵌入维度: {self.dimensions}")
             else:
                 raise ImportError("sentence-transformers 未安装")
                 
         except Exception as e:
-            print(f"❌ 模型加载失败: {e}")
-            print("\n🔄 创建离线回退模型...")
+            print(f"  模型加载失败: {e}")
+            print("\n 创建离线回退模型...")
             self._create_fallback_model()
     
     def _check_local_cache(self):
@@ -79,20 +79,20 @@ class TextEmbeddingModel:
             model_path = os.path.join(cache_dir, model_pattern)
             
             if os.path.exists(model_path):
-                print(f"✅ 发现本地缓存模型: {model_path}")
+                print(f"  发现本地缓存模型: {model_path}")
                 return model_path
             else:
-                print(f"⚠️  本地缓存中没有模型: {self.model_name}")
+                print(f"  本地缓存中没有模型: {self.model_name}")
         else:
-            print(f"⚠️  模型缓存目录不存在: {cache_dir}")
+            print(f"  模型缓存目录不存在: {cache_dir}")
             os.makedirs(cache_dir, exist_ok=True)
-            print(f"✅ 已创建缓存目录: {cache_dir}")
+            print(f"  已创建缓存目录: {cache_dir}")
         
         return None
     
     def _create_fallback_model(self):
         """创建离线回退模型"""
-        print("⚠️ 使用回退模型（离线模式）")
+        print(" 使用回退模型（离线模式）")
         
         class FallbackModel:
             def __init__(self, dim=384):
@@ -122,7 +122,7 @@ class TextEmbeddingModel:
         self.model = FallbackModel(384)
         self.dimensions = 384
         self.model_name = "fallback-offline-model"
-        print("✅ 回退模型创建成功")
+        print("  回退模型创建成功")
     
     def get_embedding(self, text: str) -> np.ndarray:
         """
@@ -181,7 +181,7 @@ class TextEmbeddingModel:
 # 测试函数
 def test_embedding_model():
     """测试嵌入模型"""
-    print("🧪 测试嵌入模型")
+    print(" 测试嵌入模型")
     print("=" * 60)
     
     try:
@@ -191,16 +191,16 @@ def test_embedding_model():
         texts = ["Python编程语言", "向量数据库ChromaDB", "大型语言模型LLM"]
         embeddings = embedder.get_embeddings(texts)
         
-        print(f"✅ 模型: {embedder.model_name}")
-        print(f"✅ 维度: {embedder.dimensions}")
-        print(f"✅ 测试文本: {texts}")
-        print(f"✅ 嵌入形状: {embeddings.shape}")
+        print(f"  模型: {embedder.model_name}")
+        print(f"  维度: {embedder.dimensions}")
+        print(f"  测试文本: {texts}")
+        print(f"  嵌入形状: {embeddings.shape}")
         
         # 测试相似度
         query = "编程语言Python"
         similarities = embedder.compute_similarity(query, texts)
         
-        print(f"\n✅ 相似度测试:")
+        print(f"\n  相似度测试:")
         print(f"   查询: '{query}'")
         for text, sim in zip(texts, similarities):
             print(f"   '{text}': {sim:.4f}")
@@ -208,42 +208,42 @@ def test_embedding_model():
         return True
         
     except Exception as e:
-        print(f"❌ 测试失败: {e}")
+        print(f"  测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 def test_embedding_model():
     """测试嵌入模型 - 供外部调用"""
-    print("🧪 测试嵌入模型（外部调用）")
+    print(" 测试嵌入模型（外部调用）")
     print("=" * 50)
     
     try:
         embedder = TextEmbeddingModel()
         
-        print(f"✅ 模型: {embedder.model_name}")
-        print(f"✅ 维度: {embedder.dimensions}")
+        print(f"  模型: {embedder.model_name}")
+        print(f"  维度: {embedder.dimensions}")
         
         # 测试基本功能
         texts = ["测试文本1", "测试文本2", "测试文本3"]
         embeddings = embedder.get_embeddings(texts)
         
-        print(f"✅ 批量处理 {len(texts)} 个文本")
-        print(f"✅ 嵌入形状: {embeddings.shape}")
+        print(f"  批量处理 {len(texts)} 个文本")
+        print(f"  嵌入形状: {embeddings.shape}")
         
         # 测试相似度
         query = "测试"
         similarities = embedder.compute_similarity(query, texts)
         
-        print(f"✅ 查询: '{query}'")
+        print(f"  查询: '{query}'")
         for i, (text, sim) in enumerate(zip(texts, similarities), 1):
             print(f"   文本{i}: '{text}' - 相似度: {sim:.4f}")
         
-        print("\n🎉 嵌入模型测试完成！")
+        print("\n  嵌入模型测试完成！")
         return True
         
     except Exception as e:
-        print(f"❌ 测试失败: {e}")
+        print(f"  测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False

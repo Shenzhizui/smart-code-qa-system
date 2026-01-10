@@ -36,7 +36,7 @@ class SmartGitHubCrawler(GitHubCrawler):
         2. 获取评论最多的Issue
         3. 获取不同类型的Issue（bug/feature等）
         """
-        print(f"📊 开始智能抽样获取 {repo_name} 的Issue...")
+        print(f" 开始智能抽样获取 {repo_name} 的Issue...")
         print(f"   目标样本量: {sample_size}个")
         
         all_samples = []
@@ -64,7 +64,7 @@ class SmartGitHubCrawler(GitHubCrawler):
         # 去重
         unique_issues = self._deduplicate_issues(all_samples)
         
-        print(f"✅ 智能抽样完成: 获取 {len(unique_issues)} 个独特Issue")
+        print(f"  智能抽样完成: 获取 {len(unique_issues)} 个独特Issue")
         return unique_issues[:sample_size]
     
     def _get_recent_issues(self, repo_name: str, limit: int) -> List[GitHubIssue]:
@@ -184,7 +184,7 @@ class SmartGitHubCrawler(GitHubCrawler):
         """
         分析大型仓库的Issue概况
         """
-        print(f"\n📈 分析大型仓库: {repo_name}")
+        print(f"\n 分析大型仓库: {repo_name}")
         print("=" * 50)
         
         # 1. 获取仓库基本信息
@@ -195,11 +195,11 @@ class SmartGitHubCrawler(GitHubCrawler):
             print(f"Stars: {repo_info.stars}, Forks: {repo_info.forks}")
         
         # 2. 获取少量样本进行分析
-        print(f"\n🔍 获取Issue样本进行分析...")
+        print(f"\n 获取Issue样本进行分析...")
         sample_issues = self.get_issues_smart_sample(repo_name, sample_size=30)
         
         if not sample_issues:
-            print("❌ 无法获取Issue样本")
+            print(" 无法获取Issue样本")
             return
         
         # 3. 分析样本
@@ -208,7 +208,7 @@ class SmartGitHubCrawler(GitHubCrawler):
         closed_count = total_issues - open_count
         pr_count = sum(1 for i in sample_issues if i.is_pull_request)
         
-        print(f"\n📊 样本分析结果 (基于 {total_issues} 个样本):")
+        print(f"\n 样本分析结果 (基于 {total_issues} 个样本):")
         print(f"   开启率: {open_count/total_issues*100:.1f}%")
         print(f"   关闭率: {closed_count/total_issues*100:.1f}%")
         print(f"   PR比例: {pr_count/total_issues*100:.1f}%")
@@ -233,14 +233,14 @@ class SmartGitHubCrawler(GitHubCrawler):
             print(f"   热门标签: {', '.join([f'{label}({count})' for label, count in top_labels])}")
         
         # 4. 估算总数
-        print(f"\n🔮 基于样本估算总体情况:")
+        print(f"\n 基于样本估算总体情况:")
         
         # 假设样本具有代表性，估算总体评论数
         estimated_total_comments = avg_comments * 2000 if avg_comments > 0 else 0
         print(f"   估算总评论数: {estimated_total_comments:,.0f}")
         
         # 建议的处理策略
-        print(f"\n💡 建议处理策略:")
+        print(f"\n 建议处理策略:")
         print(f"   1. 使用智能抽样 (推荐 {min(100, total_issues*3)} 个样本)")
         print(f"   2. 重点关注有评论的Issue")
         print(f"   3. 按标签分类处理")

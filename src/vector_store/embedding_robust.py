@@ -28,8 +28,8 @@ class RobustEmbeddingModel:
         try:
             self._load_model()
         except Exception as e:
-            print(f"❌ 模型加载失败: {e}")
-            print("🔄 创建离线回退模型...")
+            print(f"  模型加载失败: {e}")
+            print(" 创建离线回退模型...")
             self._create_fallback_model()
     
     def _select_best_model(self):
@@ -44,7 +44,7 @@ class RobustEmbeddingModel:
         import os
         for model_path in local_models:
             if os.path.exists(model_path):
-                print(f"✅ 发现本地模型: {model_path}")
+                print(f"  发现本地模型: {model_path}")
                 return model_path
         
         # 没有本地模型，选择小型在线模型
@@ -54,7 +54,7 @@ class RobustEmbeddingModel:
         """加载模型"""
         from sentence_transformers import SentenceTransformer
         
-        print(f"📥 正在加载模型: {self.model_name}")
+        print(f" 正在加载模型: {self.model_name}")
         
         # 设置重试和超时
         import requests
@@ -74,12 +74,12 @@ class RobustEmbeddingModel:
         test_embedding = self.model.encode(["test"])
         self.dimensions = test_embedding.shape[1]
         
-        print(f"✅ 模型加载成功！")
-        print(f"✅ 嵌入维度: {self.dimensions}")
+        print(f"  模型加载成功！")
+        print(f"  嵌入维度: {self.dimensions}")
     
     def _create_fallback_model(self):
         """创建回退模型"""
-        print("⚠️ 使用回退模型（离线模式）")
+        print(" 使用回退模型（离线模式）")
         
         class FallbackModel:
             def __init__(self, dim=384):
@@ -139,7 +139,7 @@ class RobustEmbeddingModel:
 # 主函数：测试模型
 def test_robust_model():
     """测试健壮模型"""
-    print("🧪 测试健壮嵌入模型")
+    print(" 测试健壮嵌入模型")
     print("=" * 50)
     
     model = RobustEmbeddingModel()
@@ -148,10 +148,10 @@ def test_robust_model():
     texts = ["hello world", "this is a test", "vector database"]
     embeddings = model.get_embeddings(texts)
     
-    print(f"✅ 模型名称: {model.model_name}")
-    print(f"✅ 嵌入维度: {model.dimensions}")
-    print(f"✅ 批量处理: {len(texts)} 个文本")
-    print(f"✅ 嵌入形状: {embeddings.shape}")
+    print(f"  模型名称: {model.model_name}")
+    print(f"  嵌入维度: {model.dimensions}")
+    print(f"  批量处理: {len(texts)} 个文本")
+    print(f"  嵌入形状: {embeddings.shape}")
     
     # 测试相似度
     query = "test world"
@@ -159,7 +159,7 @@ def test_robust_model():
     
     similarities = model.compute_similarity(query, sentences)
     
-    print(f"\n✅ 相似度测试:")
+    print(f"\n  相似度测试:")
     print(f"   查询: '{query}'")
     for i, (sentence, sim) in enumerate(zip(sentences, similarities), 1):
         print(f"   句子{i}: '{sentence}' - 相似度: {sim:.4f}")

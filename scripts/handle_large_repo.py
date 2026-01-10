@@ -19,9 +19,9 @@ def main():
     # 导入智能爬取器
     try:
         from src.crawler.smart_crawler import SmartGitHubCrawler
-        print("✅ 智能爬取器导入成功")
+        print("  智能爬取器导入成功")
     except ImportError as e:
-        print(f"❌ 导入失败: {e}")
+        print(f"  导入失败: {e}")
         print("请先创建 smart_crawler.py 文件")
         return
     
@@ -29,25 +29,25 @@ def main():
     crawler = SmartGitHubCrawler(request_delay=0.5, max_issues_per_repo=100)
     
     if not crawler.is_connected():
-        print("❌ GitHub未连接")
+        print("  GitHub未连接")
         return
     
     # 示例仓库（可以替换为你的目标仓库）
     large_repo = "Shenzhizui/smart-code-qa-system"  # 你自己的仓库
     
-    print(f"\n🎯 目标仓库: {large_repo}")
+    print(f"\n  目标仓库: {large_repo}")
     print("-" * 50)
     
     # 分析大型仓库
     crawler.analyze_large_repository(large_repo)
     
-    print(f"\n🚀 开始智能抽样获取Issue...")
+    print(f"\n  开始智能抽样获取Issue...")
     
     # 获取智能样本
     sample_issues = crawler.get_issues_smart_sample(large_repo, sample_size=50)
     
     if sample_issues:
-        print(f"\n✅ 成功获取 {len(sample_issues)} 个Issue样本")
+        print(f"\n  成功获取 {len(sample_issues)} 个Issue样本")
         
         # 保存样本数据
         import json
@@ -82,10 +82,10 @@ def main():
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(issues_data, f, ensure_ascii=False, indent=2)
         
-        print(f"📁 样本数据已保存到: {output_file}")
+        print(f"  样本数据已保存到: {output_file}")
         
         # 显示统计信息
-        print(f"\n📊 样本统计:")
+        print(f"\n  样本统计:")
         print(f"   总Issue数: {len(sample_issues)}")
         
         issues_with_comments = [i for i in sample_issues if i.comments > 0]
@@ -104,7 +104,7 @@ def main():
             print(f"   标签种类: {len(unique_labels)}")
     
     print("\n" + "=" * 70)
-    print("✅ 大型仓库处理完成")
+    print("  大型仓库处理完成")
     print("=" * 70)
     
     print("\n💡 后续建议:")

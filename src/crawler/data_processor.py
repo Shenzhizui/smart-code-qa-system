@@ -331,7 +331,7 @@ def hello():
 
     
     print("\n" + "=" * 60)
-    print("✅ 数据处理器测试完成")
+    print("  数据处理器测试完成")
     print("=" * 60)
 
 if __name__ == "__main__":

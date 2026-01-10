@@ -30,7 +30,7 @@ class DataIndexer:
             collection_name: 集合名称
         """
         self.vector_store = ChromaVectorStore(collection_name)
-        print(f"✅ 数据索引器初始化完成")
+        print(f"  数据索引器初始化完成")
         print(f"   集合名称: {collection_name}")
     
     def index_code_files(self, code_files_data: List[Dict[str, Any]]):
@@ -41,10 +41,10 @@ class DataIndexer:
             code_files_data: 代码文件数据列表
         """
         if not code_files_data:
-            print("⚠️ 没有代码文件数据可索引")
+            print("  没有代码文件数据可索引")
             return
         
-        print(f"📁 开始索引 {len(code_files_data)} 个代码文件...")
+        print(f"  开始索引 {len(code_files_data)} 个代码文件...")
         
         documents = []
         for file_data in code_files_data:
@@ -66,7 +66,7 @@ class DataIndexer:
         
         # 添加到向量存储
         self.vector_store.add_documents(documents)
-        print(f"✅ 代码文件索引完成: {len(documents)} 个文件")
+        print(f"  代码文件索引完成: {len(documents)} 个文件")
     
     def index_issues(self, issues_data: List[Dict[str, Any]]):
         """
@@ -76,10 +76,10 @@ class DataIndexer:
             issues_data: Issue数据列表
         """
         if not issues_data:
-            print("⚠️ 没有Issue数据可索引")
+            print("  没有Issue数据可索引")
             return
         
-        print(f"📝 开始索引 {len(issues_data)} 个Issues...")
+        print(f"  开始索引 {len(issues_data)} 个Issues...")
         
         documents = []
         for issue_data in issues_data:
@@ -107,7 +107,7 @@ class DataIndexer:
         
         # 添加到向量存储
         self.vector_store.add_documents(documents)
-        print(f"✅ Issues索引完成: {len(documents)} 个Issue")
+        print(f"  Issues索引完成: {len(documents)} 个Issue")
     
     def index_pull_requests(self, prs_data: List[Dict[str, Any]]):
         """
@@ -117,10 +117,10 @@ class DataIndexer:
             prs_data: PR数据列表
         """
         if not prs_data:
-            print("⚠️ 没有PR数据可索引")
+            print("  没有PR数据可索引")
             return
         
-        print(f"🔀 开始索引 {len(prs_data)} 个Pull Requests...")
+        print(f"  开始索引 {len(prs_data)} 个Pull Requests...")
         
         documents = []
         for pr_data in prs_data:
@@ -145,7 +145,7 @@ class DataIndexer:
         
         # 添加到向量存储
         self.vector_store.add_documents(documents)
-        print(f"✅ Pull Requests索引完成: {len(documents)} 个PR")
+        print(f"  Pull Requests索引完成: {len(documents)} 个PR")
     
     def index_readme_files(self, readme_data: List[Dict[str, Any]]):
         """
@@ -155,7 +155,7 @@ class DataIndexer:
             readme_data: README数据列表
         """
         if not readme_data:
-            print("⚠️ 没有README数据可索引")
+            print("  没有README数据可索引")
             return
         
         print(f"📖 开始索引 {len(readme_data)} 个README文件...")
@@ -176,7 +176,7 @@ class DataIndexer:
             })
         
         self.vector_store.add_documents(documents)
-        print(f"✅ README文件索引完成: {len(documents)} 个文件")
+        print(f"  README文件索引完成: {len(documents)} 个文件")
     
     def _prepare_code_text(self, file_data: Dict[str, Any]) -> str:
         """准备代码文件文本"""
@@ -324,9 +324,9 @@ def test_data_indexer():
         print("\n4. 测试搜索...")
         results = vector_store.search("测试Issue", n_results=1)
         if results:
-            print(f"✅ 搜索成功，找到 {len(results)} 个结果")
+            print(f"  搜索成功，找到 {len(results)} 个结果")
         else:
-            print("⚠️  未找到结果")
+            print("   未找到结果")
         
         return True
         

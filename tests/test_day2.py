@@ -17,10 +17,10 @@ def test_imports():
     
     try:
         from src.crawler.github_crawler import GitHubCrawler, GitHubFile, CodeFile
-        print("✅ GitHubCrawler和相关类")
+        print("  GitHubCrawler和相关类")
         return True
     except Exception as e:
-        print(f"❌ 导入失败: {e}")
+        print(f"  导入失败: {e}")
         return False
 
 def test_data_processor():
@@ -35,23 +35,23 @@ def test_data_processor():
         test_text = "  test  text  "
         cleaned = processor.clean_text(test_text)
         if cleaned == "test text":
-            print("✅ 文本清理功能")
+            print("  文本清理功能")
         else:
-            print(f"❌ 文本清理异常: {repr(cleaned)}")
+            print(f"  文本清理异常: {repr(cleaned)}")
             return False
         
         # 测试元数据创建
         metadata = processor.create_metadata("test", "owner/repo", "test.txt")
         if all(key in metadata for key in ["source_type", "repository", "file_path"]):
-            print("✅ 元数据创建功能")
+            print("  元数据创建功能")
         else:
-            print(f"❌ 元数据创建异常: {metadata}")
+            print(f"  元数据创建异常: {metadata}")
             return False
         
         return True
         
     except Exception as e:
-        print(f"❌ 数据处理器测试失败: {e}")
+        print(f"  数据处理器测试失败: {e}")
         return False
 
 def test_github_extensions():
@@ -64,21 +64,21 @@ def test_github_extensions():
         crawler = GitHubCrawler()
         
         if not crawler.is_connected():
-            print("⚠ GitHub未连接，跳过扩展测试")
+            print("  GitHub未连接，跳过扩展测试")
             return True  # 不算失败，只是跳过
         
         # 测试语言映射
         language = crawler._get_language_from_extension(".py")
         if language == "Python":
-            print("✅ 语言映射功能")
+            print("  语言映射功能")
         else:
-            print(f"❌ 语言映射异常: {language}")
+            print(f"  语言映射异常: {language}")
             return False
         
         return True
         
     except Exception as e:
-        print(f"❌ GitHub扩展测试失败: {e}")
+        print(f"  GitHub扩展测试失败: {e}")
         return False
 
 def run_data_processor_demo():
@@ -91,7 +91,7 @@ def run_data_processor_demo():
         test_processor()
         return True
     except Exception as e:
-        print(f"❌ 数据处理器演示失败: {e}")
+        print(f"  数据处理器演示失败: {e}")
         return False
 
 def main():
@@ -114,7 +114,7 @@ def main():
             success = test_func()
             results.append((test_name, success))
         except Exception as e:
-            print(f"❌ 测试异常: {e}")
+            print(f"  测试异常: {e}")
             results.append((test_name, False))
     
     # 总结
@@ -126,7 +126,7 @@ def main():
     total = len(results)
     
     for test_name, success in results:
-        status = "✅" if success else "❌"
+        status = " " if success else " "
         print(f"{status} {test_name}")
     
     print(f"\n通过: {passed}/{total}")
@@ -135,10 +135,10 @@ def main():
         print("\n🎉 所有测试通过！")
         print("\n运行演示: python scripts/day2_demo.py")
     elif passed >= 3:
-        print(f"\n⚠ {total - passed} 个测试失败，但核心功能正常")
+        print(f"\n  {total - passed} 个测试失败，但核心功能正常")
         print("\n仍然可以运行演示: python scripts/day2_demo.py")
     else:
-        print(f"\n❌ {total - passed} 个测试失败，需要修复")
+        print(f"\n  {total - passed} 个测试失败，需要修复")
     
     print("\n" + "=" * 60)
 

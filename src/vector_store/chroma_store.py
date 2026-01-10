@@ -20,7 +20,7 @@ try:
     CHROMADB_AVAILABLE = True
 except ImportError:
     CHROMADB_AVAILABLE = False
-    print("⚠️  chromadb 不可用")
+    print(" chromadb 不可用")
 
 try:
     from .embedding import TextEmbeddingModel
@@ -70,7 +70,7 @@ class ChromaVectorStore:
         # 获取或创建集合
         self.collection = self._get_or_create_collection(collection_name)
         
-        print(f"✅ ChromaDB向量存储初始化完成")
+        print(f" ChromaDB向量存储初始化完成")
         print(f"   存储路径: {self.persist_dir}")
         print(f"   集合名称: {collection_name}")
         print(f"   嵌入维度: {self.embedder.dimensions}")
@@ -80,11 +80,11 @@ class ChromaVectorStore:
         try:
             # 尝试获取现有集合
             collection = self.client.get_collection(name=name)
-            print(f"📂 加载现有集合: {name}")
+            print(f" 加载现有集合: {name}")
             return collection
         except Exception:
             # 创建新集合
-            print(f"🆕 创建新集合: {name}")
+            print(f" 创建新集合: {name}")
             return self.client.create_collection(
                 name=name,
                 metadata={"description": "智能代码仓库问答系统向量存储"},
@@ -118,10 +118,10 @@ class ChromaVectorStore:
             batch_size: 批量添加大小
         """
         if not documents:
-            print("⚠️ 没有文档可添加")
+            print(" 没有文档可添加")
             return
         
-        print(f"📥 开始添加 {len(documents)} 个文档到向量存储...")
+        print(f" 开始添加 {len(documents)} 个文档到向量存储...")
         
         # 分批处理
         for i in range(0, len(documents), batch_size):
@@ -166,9 +166,9 @@ class ChromaVectorStore:
                     ids=ids
                 )
                 
-                print(f"   ✅ 批次 {batch_num} 添加成功")
+                print(f"     批次 {batch_num} 添加成功")
         
-        print(f"🎉 所有文档添加完成！共添加 {len(documents)} 个文档")
+        print(f"  所有文档添加完成！共添加 {len(documents)} 个文档")
     
     def search(self, query: str, n_results: int = 5, filter_metadata: Optional[Dict] = None) -> List[Dict[str, Any]]:
         """
@@ -235,13 +235,13 @@ class ChromaVectorStore:
         else:
             self.collection.delete()
             self.collection = self._get_or_create_collection(self.collection.name)
-        print("🔄 集合已重置")
+        print("  集合已重置")
 
 
 # 测试函数
 def test_chroma_store():
     """测试ChromaDB存储"""
-    print("🧪 测试ChromaDB向量存储")
+    print("  测试ChromaDB向量存储")
     print("=" * 60)
     
     try:
@@ -270,7 +270,7 @@ def test_chroma_store():
         query = "编程语言"
         results = store.search(query, n_results=2)
         
-        print(f"✅ 查询: '{query}'")
+        print(f"  查询: '{query}'")
         if results:
             for i, result in enumerate(results, 1):
                 doc_preview = result['document']
@@ -285,7 +285,7 @@ def test_chroma_store():
         
         # 获取集合信息
         info = store.get_collection_info()
-        print(f"\n📊 集合信息:")
+        print(f"\n   集合信息:")
         print(f"   名称: {info['collection_name']}")
         print(f"   文档数: {info['document_count']}")
         print(f"   维度: {info['embedding_dimension']}")
@@ -293,7 +293,7 @@ def test_chroma_store():
         return True
         
     except Exception as e:
-        print(f"❌ 测试失败: {e}")
+        print(f"  测试失败: {e}")
         import traceback
         traceback.print_exc()
         return False

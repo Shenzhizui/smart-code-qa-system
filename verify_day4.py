@@ -7,7 +7,6 @@ from pathlib import Path
 
 # ============ 关键：在导入之前设置镜像源 ============
 os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
-print(f"🔧 设置镜像源: HF_ENDPOINT={os.environ['HF_ENDPOINT']}")
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent
